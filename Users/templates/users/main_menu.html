@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メインメニュー</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'users/main_menu.css' %}">
+</head>
+<body>
+    <header>
+        <h1>メインメニュー</h1>
+        <nav>
+            <a href="{% url 'login' %}">ログアウト</a>
+        </nav>
+    </header>
+    <main>
+        <section id="courses">
+            <h2>コース一覧</h2>
+            <ul>
+                <!-- ここに各ユーザーのコースを動的に追加 -->
+                {% for user_course in user_courses %}
+                    <li><a href="{% url 'course_assignments' user_course.course.id %}">{{ user_course.course.course_name }}</a></li>
+                {% empty %}
+                    <li>登録されたコースがありません。</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section id="announcements">
+            <h2>お知らせ</h2>
+            <ul>
+                <!-- ここにお知らせを動的に追加 -->
+                <li>お知らせ1</li>
+                <li>お知らせ2</li>
+                <li>お知らせ3</li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 komadaru. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/login.css' %}">
+</head>
+<body>
+    <div class="login-form">
+        <h2>ログイン</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="textbox">
+                <label for="email">メールアドレス:</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div class="textbox">
+                <label for="password">パスワード:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">ログイン</button>
+        </form>
+        <p>アカウントをお持ちでない場合は、<a href="{% url 'signup' %}">こちら</a>からサインアップしてください。</p>
+    </div>
+</body>
+</html>

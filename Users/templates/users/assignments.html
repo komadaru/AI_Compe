@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>課題一覧</title>
+    {% load static %}
+    {% load custom_filters %}
+    <link rel="stylesheet" href="{% static 'users/assignments.css' %}">
+</head>
+<body>
+    <header>
+        <h1>{{ course.course_name }}の課題一覧</h1>
+        <nav>
+            <a href="{% url 'main_menu' %}">メインメニューに戻る</a>
+        </nav>
+    </header>
+    <main>
+        <section id="assignments">
+            <h2>課題</h2>
+            <ul>
+                {% for assignment in assignments %}
+                <li>
+                    <a href="{% if assignment.type == 'csv' %}{% url 'csv_submission' assignment.id %}{% else %}{% url 'code_submission' assignment.id %}{% endif %}">
+                        {{ assignment.title }}
+                    </a>
+                    <span class="task-deadline">期限: {{ assignment.due_date|japanese_date }}</span>
+                    <!-- 提出状態をuser_assignmentsでチェック -->
+                    <span class="task-status {% if user_assignments|dict_key:assignment.id %}submitted{% else %}not-submitted{% endif %}">
+                        {% if user_assignments|dict_key:assignment.id %}提出済み{% else %}未提出{% endif %}
+                    </span>
+                </li>
+                {% empty %}
+                <li>このコースにはまだ課題がありません。</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 komadaru. All rights reserved.</p>
+    </footer>
+</body>
+</html>

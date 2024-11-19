@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提出結果</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'users/code_submission_result.css' %}">
+</head>
+<body>
+    <header>
+        <h1>提出結果</h1>
+    </header>
+    <main>
+        <p>提出日時: {{ user_assignment.submission_date|date:"Y年m月d日 H:i:s" }}</p>
+        <p>スコア: {{ user_assignment.score }}</p>
+        <h2>提出内容</h2>
+        <pre>{{ user_assignment.submitted_csv }}</pre>
+    </main>
+</body>
+</html>

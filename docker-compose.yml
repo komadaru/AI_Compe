@@ -1,0 +1,16 @@
+version: '3'
+services:
+  base:
+    build:
+      context: .
+      target: base
+    image: base_image:latest
+
+  submission:
+    build:
+      context: .
+      target: submission
+    image: submission_image:latest
+    volumes:
+      - ./user_code:/app/user_code
+    command: ["python", "/app/user_code/code_submission.py"]

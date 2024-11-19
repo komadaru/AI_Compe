@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV 課題提出</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'users/csv_submission.css' %}">
+</head>
+<body>
+    <header>
+        <h1>{{ assignment.title }} - CSV 課題提出</h1>
+        <nav>
+            <a href="{% url 'course_assignments' assignment.course.id %}">課題一覧に戻る</a>
+        </nav>
+    </header>
+    <main>
+        <section id="upload">
+            <h2>CSV ファイルのアップロード</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">提出</button>
+            </form>
+        </section>
+        {% if user_assignments %}
+        <section id="results">
+            <h2>提出結果</h2>
+            {% for ua in user_assignments %}
+            <p>提出日時: {{ ua.submission_date|date:"Y年m月d日 H:i:s" }}</p>
+            <p>正解率: {{ ua.score }}%</p>
+            <p>提出内容:</p>
+            <pre>{{ ua.submitted_csv|truncatechars:500 }}</pre>
+            {% endfor %}
+        </section>
+        {% endif %}
+    </main>
+    <footer>
+        <p>&copy; 2024 komadaru. All rights reserved.</p>
+    </footer>
+</body>
+</html>

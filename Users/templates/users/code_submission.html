@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コード提出</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'users/code_submission.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>{{ assignment.title }} - コード提出</h1>
+        <nav>
+            <a href="{% url 'course_assignments' assignment.course.id %}">課題一覧に戻る</a>
+        </nav>
+    </header>
+    <main>
+        <form method="post" id="code-form">
+            {% csrf_token %}
+            <label for="code-editor">コードを入力してください:</label>
+            <textarea id="code-editor" name="code">{{ form.code.value|default_if_none:"" }}</textarea>
+            <button type="submit">提出する</button>
+        </form>
+
+        {% if execution_result %}
+            <h2>結果</h2>
+            <p>{{ execution_result }}</p>
+        {% endif %}
+
+        <h2>過去の提出</h2>
+        <ul>
+            {% for ua in user_assignments %}
+                <li>
+                    提出日時: {{ ua.submission_date }}<br>
+                    スコア: {{ ua.score }}<br>
+                    提出コード:<br>
+                    <pre>{{ ua.submitted_csv }}</pre>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            lineNumbers: true,
+            mode: 'python',
+            theme: 'material-darker',
+        });
+
+        // フォーム送信時にCodeMirrorの内容をtextareaにコピーする
+        document.getElementById('code-form').addEventListener('submit', function() {
+            document.getElementById('code-editor').value = editor.getValue();
+        });
+    </script>
+</body>
+</html>
